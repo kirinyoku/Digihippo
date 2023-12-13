@@ -23,7 +23,7 @@ interface Args {
 }
 
 async function getPayloadClient({ initOptions }: Args = {}) {
-  if (!process.env.PAYLAOD_SECRET) {
+  if (!process.env.PAYLOAD_SECRET) {
     throw new Error("PAYLOAD_SECRET is missing");
   }
 
