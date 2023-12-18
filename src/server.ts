@@ -4,6 +4,8 @@ import path from "path";
 import payload from "payload";
 import next from "next";
 import type { InitOptions } from "payload/config";
+import * as trpcExpress from "@trpc/server/adapters/express";
+import { appRouter } from "./trpc";
 
 dotenv.config({
   path: path.resolve(__dirname, "../.env"),
@@ -51,10 +53,18 @@ async function getPayloadClient({ initOptions }: Args = {}) {
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 
+function createContext({ req, res }: trpcExpress.CreateExpressContextOptions) {
+  return {
+    req,
+    res,
+  };
+}
+
 const nextApp = next({
   dev: process.env.NODE_ENV !== "production",
   port: PORT,
 });
+
 const nextHandler = nextApp.getRequestHandler();
 
 async function start() {
@@ -66,6 +76,14 @@ async function start() {
       },
     },
   });
+
+  app.use(
+    "/api/trpc",
+    trpcExpress.createExpressMiddleware({
+      router: appRouter,
+      createContext,
+    })
+  );
 
   app.use((req, res) => nextHandler(req, res));
 
