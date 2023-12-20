@@ -9,27 +9,26 @@ import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import {
+  AuthCredentialsValidator,
+  TAuthCredentialsValidator,
+} from "@/lib/validators/accountCredentialsValidator";
+import { trpc } from "@/trpc/client";
 
 export default function SignUpPage() {
-  const AuthCredentialsValidator = z.object({
-    email: z.string().email(),
-    password: z
-      .string()
-      .min(8, { message: "Password must be at least 8 characters long." }),
-  });
-
-  type TAuthCredentialsValidator = z.infer<typeof AuthCredentialsValidator>;
-
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
+  } = useForm<TAuthCredentialsValidator>({
     resolver: zodResolver(AuthCredentialsValidator),
   });
 
-  function onSubmit({ email, password }: TAuthCredentialsValidator) {}
+  const { mutate, isLoading } = trpc.auth.createPayloadUser.useMutation({});
+
+  function onSubmit({ email, password }: TAuthCredentialsValidator) {
+    mutate({ email, password });
+  }
 
   return (
     <>

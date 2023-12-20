@@ -1,14 +1,25 @@
 import express from "express";
 import dotenv from "dotenv";
 import path from "path";
-import payload from "payload";
+import payload, { Payload } from "payload";
 import next from "next";
 import type { InitOptions } from "payload/config";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { appRouter } from "./trpc";
+import nodemailer from "nodemailer";
 
 dotenv.config({
   path: path.resolve(__dirname, "../.env"),
+});
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.resend.com",
+  secure: true,
+  port: 465,
+  auth: {
+    user: "resend",
+    pass: process.env.RESEND_API_KEY,
+  },
 });
 
 let cached = (global as any).payload;
@@ -24,7 +35,9 @@ interface Args {
   initOptions?: Partial<InitOptions>;
 }
 
-async function getPayloadClient({ initOptions }: Args = {}) {
+export async function getPayloadClient({
+  initOptions,
+}: Args = {}): Promise<Payload> {
   if (!process.env.PAYLOAD_SECRET) {
     throw new Error("PAYLOAD_SECRET is missing");
   }
@@ -35,6 +48,11 @@ async function getPayloadClient({ initOptions }: Args = {}) {
 
   if (!cached.promise) {
     cached.promise = payload.init({
+      email: {
+        transport: transporter,
+        fromAddress: "onboarding@resend.com",
+        fromName: "DigiHippo",
+      },
       secret: process.env.PAYLOAD_SECRET || "",
       local: initOptions?.express ? false : true,
       ...(initOptions || {}),
