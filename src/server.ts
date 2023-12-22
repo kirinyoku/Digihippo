@@ -7,6 +7,7 @@ import type { InitOptions } from "payload/config";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { appRouter } from "./trpc";
 import nodemailer from "nodemailer";
+import { inferAsyncReturnType } from "@trpc/server";
 
 dotenv.config({
   path: path.resolve(__dirname, "../.env"),
@@ -116,3 +117,5 @@ async function start() {
 }
 
 start();
+
+export type ExpressContext = inferAsyncReturnType<typeof createContext>;
