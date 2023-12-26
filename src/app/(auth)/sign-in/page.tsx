@@ -34,7 +34,6 @@ export default function SignUpPage() {
   const { mutate: signIn, isLoading } = trpc.auth.signInUser.useMutation({
     onSuccess: () => {
       toast.success("Signed in successfully");
-      router.refresh();
 
       if (origin) {
         router.push(`/${origin}`);
@@ -46,6 +45,7 @@ export default function SignUpPage() {
       }
 
       router.push("/");
+      router.refresh();
     },
     onError: (error) => {
       if (error.data?.code === "UNAUTHORIZED") {
