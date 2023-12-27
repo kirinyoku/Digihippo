@@ -1,4 +1,4 @@
-import productCategories from "@/config/product-categories";
+import productCategories from "../config/product-categories";
 import { CollectionConfig } from "payload/types";
 
 const Products: CollectionConfig = {
@@ -46,11 +46,11 @@ const Products: CollectionConfig = {
     },
     {
       name: "product_files",
-      label: "Product files(s)",
+      label: "Product file(s)",
       type: "relationship",
       relationTo: "product_files",
       required: true,
-      hasMany: true,
+      hasMany: false,
     },
     {
       name: "approvedForSales",
