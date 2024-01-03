@@ -27,7 +27,7 @@ export default function ProductReel(props: ProductReelProps) {
       {
         getNextPageParam: (lastPage) => lastPage.nextPage,
       }
-    );
+    )
 
   const products = queryResults?.pages.flatMap((page) => page.items);
 
