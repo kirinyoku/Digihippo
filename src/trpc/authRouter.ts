@@ -1,6 +1,6 @@
 import { AuthCredentialsValidator } from "../lib/validators/accountCredentialsValidator";
 import { publicProcedure, router } from "./trpc";
-import { getPayloadClient } from "../server";
+import { getPayloadClient } from "../getPayload";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 

@@ -2,7 +2,7 @@ import { z } from "zod";
 import { authRouter } from "./authRouter";
 import { publicProcedure, router } from "./trpc";
 import { QueryValidator } from "../lib/validators/queryValidator";
-import { getPayloadClient } from "../server";
+import { getPayloadClient } from "../getPayload";
 
 export const appRouter = router({
   auth: authRouter,
