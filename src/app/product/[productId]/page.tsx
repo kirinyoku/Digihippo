@@ -7,7 +7,7 @@ import { getPayloadClient } from "@/getPayload";
 import { Check, Shield } from "lucide-react";
 import ProductImgSlider from "@/components/product/ProductImgSlider";
 import ProductReel from "@/components/product/ProductReel";
-import AddToCartButton from "@/components/AddToCartButton";
+import AddToCartButton from "@/components/cart/AddToCartButton";
 
 interface PageProps {
   params: {
@@ -111,7 +111,7 @@ export default async function Page({ params }: PageProps) {
               </div>
             </section>
           </div>
-          <div className="mt-10 lg:col-start-2 lg:row-start-2  lg:mt-0 lg:self-center">
+          <div className="mt-10 lg:col-start-2 lg:row-span-2  lg:mt-0 lg:self-center">
             <div className="aspect-square rounded-lg">
               <ProductImgSlider urls={validUrl} />
             </div>
@@ -119,7 +119,7 @@ export default async function Page({ params }: PageProps) {
           <div className="mt-10 lg:col-start-1 lg:row-start-2 lg:max-w-lg lg:self-start">
             <div>
               <div className="mt-10">
-                <AddToCartButton />
+                <AddToCartButton product={product} />
               </div>
               <div className="mt-6 text-center">
                 <div className="group inline-flex text-sm tetx-medium">
