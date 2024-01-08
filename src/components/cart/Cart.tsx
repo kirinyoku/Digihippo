@@ -13,11 +13,11 @@ import { ShoppingCart } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
 import CartItem from "./CartItem";
 import { useCart } from "@/hooks/useCart";
 import { useEffect, useState } from "react";
 import { buttonVariants } from "../ui/button";
+import { ScrollArea } from "../ui/scroll-area";
 
 export default function Cart() {
   const { items } = useCart();
