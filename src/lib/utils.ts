@@ -1,4 +1,5 @@
 import { type ClassValue, clsx } from "clsx";
+import { Metadata } from "next";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -21,4 +22,48 @@ export function formatPrice(
     notation,
     maximumFractionDigits: 2,
   }).format(numericPrice);
+}
+
+export function constructMetadata({
+  title = "DigiHippo - the marketplace for digital assets",
+  description = "DigiHippo is an open-source marketplace for high-quality digital goods.",
+  image = "/thumbnail.png",
+  icons = "/favicon.ico",
+  noIndex = false,
+}: {
+  title?: string;
+  description?: string;
+  image?: string;
+  icons?: string;
+  noIndex?: boolean;
+} = {}): Metadata {
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: [
+        {
+          url: image,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [image],
+      creator: "@kirinyoku",
+    },
+    icons,
+    // change the URL to the production URL
+    metadataBase: new URL("http://localhost:3000"),
+    ...(noIndex && {
+      robots: {
+        index: false,
+        follow: false,
+      },
+    }),
+  };
 }
