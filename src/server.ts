@@ -6,6 +6,9 @@ import { appRouter } from "./trpc";
 import { nextApp, nextHandler } from "./nextUtils";
 import { inferAsyncReturnType } from "@trpc/server";
 import { getPayloadClient } from "./getPayload";
+import bodyParser from "body-parser";
+import { IncomingMessage } from "http";
+import { stripeWebhookHandler } from "./webhooks";
 
 dotenv.config({
   path: path.resolve(__dirname, "../.env"),
@@ -21,7 +24,17 @@ function createContext({ req, res }: trpcExpress.CreateExpressContextOptions) {
   };
 }
 
+export type WebhookRequest = IncomingMessage & { rawBody: Buffer };
+
 async function start() {
+  const webhookMiddleware = bodyParser.json({
+    verify: (req: WebhookRequest, _, buffer) => {
+      req.rawBody = buffer;
+    },
+  });
+
+  app.post("/api/webhooks/stripe", webhookMiddleware, stripeWebhookHandler);
+
   const payload = await getPayloadClient({
     initOptions: {
       express: app,
